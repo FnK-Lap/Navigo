@@ -13,6 +13,6 @@ class ApplicationControllerTest extends WebTestCase
 
     public function testIsTrue()
     {
-        $this->assertTrue(true);
+        $this->assertTrue(false);
     }
 }
