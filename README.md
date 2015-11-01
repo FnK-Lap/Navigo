@@ -1,1 +1,5 @@
 # Navigo
+
+## Installation
+
+    $ composer install
