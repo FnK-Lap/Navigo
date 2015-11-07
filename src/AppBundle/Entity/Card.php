@@ -22,6 +22,12 @@ class Card
     private $id;
 
     /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="card")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     **/
+    private $user;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_active", type="boolean")
@@ -31,7 +37,7 @@ class Card
     /**
      * @var string
      *
-     * @ORM\Column(name="serial_number", type="string", length=255)
+     * @ORM\Column(name="serial_number", type="string", length=255, unique=true)
      */
     private $serialNumber;
 
@@ -52,9 +58,16 @@ class Card
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expire_at", type="datetime")
+     * @ORM\Column(name="expire_at", type="datetime", nullable=true)
      */
     private $expireAt;
+
+
+    public function __construct()
+    {
+        $this->createdAt = $this->updatedAt = new \Datetime;
+        $this->isActive   = false;
+    }
 
 
     /**
@@ -186,5 +199,28 @@ class Card
     {
         return $this->expireAt;
     }
-}
 
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Card
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+}
