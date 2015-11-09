@@ -6,5 +6,6 @@ php:
 
 before_script:
   - composer install
+  - app/console cache:clear
 
 script: phpunit -c app/
