@@ -10,8 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\CardRepository")
  */
-class Card
+class Card implements \JsonSerializable
 {
+    const RESULT_PER_PAGE = 2;
     /**
      * @var integer
      *
@@ -222,5 +223,18 @@ class Card
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'user' => $this->user,
+            'isActive' => $this->isActive,
+            'serialNumber' => $this->serialNumber,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+            'expireAt' => $this->expireAt
+        );
     }
 }
