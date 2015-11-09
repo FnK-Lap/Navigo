@@ -10,8 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\TerminalRepository")
  */
-class Terminal
+class Terminal implements \JsonSerializable
 {
+    const RESULT_PER_PAGE = 2;
+    
     /**
      * @var integer
      *
@@ -61,6 +63,14 @@ class Terminal
     public function getSerialNumber()
     {
         return $this->serialNumber;
+    }
+
+    public function jsonSerialize()
+    {
+        return array(
+            'id'           => $this->id,
+            'serialNumber' => $this->serialNumber,
+        );
     }
 }
 
