@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Card implements \JsonSerializable
 {
     const RESULT_PER_PAGE = 2;
+    
     /**
      * @var integer
      *

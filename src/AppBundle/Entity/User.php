@@ -10,8 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  */
-class User
+class User implements \JsonSerializable
 {
+    const RESULT_PER_PAGE = 2;
+
     /**
      * @var integer
      *
@@ -377,5 +379,22 @@ class User
     {
         return $this->birthday;
     }
-}
 
+    public function jsonSerialize()
+    {
+        return array(
+            'id'        => $this->id,
+            'card'      => $this->card,
+            'firstname' => $this->firstname,
+            'lastname'  => $this->lastname,
+            'email'     => $this->email,
+            'address'   => $this->address,
+            'zipcode'   => $this->zipcode,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+            'gender'    => $this->gender,
+            'photo'     => $this->photo,
+            'birthday'  => $this->birthday
+        );
+    }
+}
