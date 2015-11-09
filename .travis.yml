@@ -6,6 +6,8 @@ php:
 
 before_script:
   - composer install
-  - app/console cache:clear --env=prod --no-debug
 
 script: phpunit -c app/
+
+after_script:
+  - app/console clear:cache --env=prod --no-debug
