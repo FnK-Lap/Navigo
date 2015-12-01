@@ -8,10 +8,41 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Card;
+use AppBundle\Form\CardType;
 
 
 class CardController extends Controller
 {
+    /**
+     * @Route("/cards", name="post_cards", methods="POST")
+     *
+     * @ApiDoc(
+     *  description="Post a new Card",
+     *  statusCodes={
+     *          201: "Created"
+     *    }
+     * )
+     */
+    public function postCardAction(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $card = new Card();
+
+        $form = $this->createForm(new CardType(), $card);
+        $form->submit($data);
+
+        var_dump($form->getData());
+        
+        if ($form->isValid()) {
+            var_dump('VALID');
+            die();
+        } 
+
+        var_dump($form->getErrorsAsString());
+        die('cc');
+    }
+
     /**
      * @Route("/cards", name="get_cards", methods="GET")
      * 
@@ -52,4 +83,65 @@ class CardController extends Controller
             )
         ));
     }
+
+    /**
+     * @Route("/card/{id}", name="get_card", methods="GET")
+     * 
+     * @ApiDoc(
+     *  description="Get card by id",
+     *  statusCodes={
+     *         200: "good"
+     *     }
+     * )
+     */
+    public function getCardAction(Request $request, $id)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $card = $em->getRepository('AppBundle:Card')->find($id);
+
+        if (!$card) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'Card not found',
+            ));
+        } 
+
+        return new JsonResponse(array(
+            'status'  => 200,
+            'message' => 'Success',
+            'data'    => $card
+        ));
+    }
+
+    /**
+     * @Route("/card/{id}", name="delete_card", methods="DELETE")
+     * 
+     * @ApiDoc(
+     *  description="Delete card by id",
+     *  statusCodes={
+     *         200: "good"
+     *     }
+     * )
+     */
+    public function deleteCardAction(Request $request, $id)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $card = $em->getRepository('AppBundle:Card')->find($id);
+
+        if (!$card) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'Card not found'
+            ));
+        }
+        $em->remove($card);
+        $em->flush();
+
+        return new JsonResponse(array(
+            'status'  => 200,
+            'message' => 'Success'
+        ));
+    }
+
+    
 }
