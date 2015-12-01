@@ -53,4 +53,63 @@ class TerminalController extends Controller
             )
         ));
     }
+
+    /**
+     * @Route("/terminal/{id}", name="get_terminal", methods="GET")
+     * 
+     * @ApiDoc(
+     *  description="Get terminal by id",
+     *  statusCodes={
+     *         200: "good"
+     *     }
+     * )
+     */
+    public function getTerminalAction(Request $request, $id)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $terminal = $em->getRepository('AppBundle:Terminal')->find($id);
+
+        if (!$terminal) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'Terminal not found',
+            ));
+        }
+
+        return new JsonResponse(array(
+            'status'  => 200,
+            'message' => 'Success',
+            'data'    => $terminal
+        ));
+    }
+
+    /**
+     * @Route("/terminal/{id}", name="delete_terminal", methods="DELETE")
+     * 
+     * @ApiDoc(
+     *  description="Delete terminal by id",
+     *  statusCodes={
+     *         200: "good"
+     *     }
+     * )
+     */
+    public function deleteTerminalAction(Request $request, $id)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $terminal = $em->getRepository('AppBundle:Terminal')->find($id);
+
+        if (!$terminal) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'Terminal not found'
+            ));
+        }
+        $em->remove($terminal);
+        $em->flush();
+
+        return new JsonResponse(array(
+            'status'  => 200,
+            'message' => 'Success'
+        ));
+    }
 }
