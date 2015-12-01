@@ -68,7 +68,7 @@ class Card implements \JsonSerializable
     public function __construct()
     {
         $this->createdAt = $this->updatedAt = new \Datetime;
-        $this->isActive   = false;
+        $this->isActive  = true;
     }
 
 
@@ -229,13 +229,13 @@ class Card implements \JsonSerializable
     public function jsonSerialize()
     {
         return array(
-            'id' => $this->id,
-            'user' => $this->user,
-            'isActive' => $this->isActive,
+            'id'           => $this->id,
+            'user'         => $this->user,
+            'isActive'     => $this->isActive,
             'serialNumber' => $this->serialNumber,
-            'createdAt' => $this->createdAt,
-            'updatedAt' => $this->updatedAt,
-            'expireAt' => $this->expireAt
+            'createdAt'    => $this->createdAt,
+            'updatedAt'    => $this->updatedAt,
+            'expireAt'     => $this->expireAt
         );
     }
 }
