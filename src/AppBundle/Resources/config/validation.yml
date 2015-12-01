@@ -1,0 +1,13 @@
+AppBundle\Entity\Card:
+    properties:
+        isActive:
+            - NotBlank: ~
+        serialNumber:
+            - NotBlank: ~
+            - Length:
+                min: 13
+                max: 13
+        createdAt:
+            - NotBlank: ~
+        updatedAt:
+            - NotBlank: ~
