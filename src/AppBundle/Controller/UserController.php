@@ -52,4 +52,63 @@ class UserController extends Controller
             )
         ));
     }
+
+    /**
+     * @Route("/user/{id}", name="get_user", methods="GET")
+     * 
+     * @ApiDoc(
+     *  description="Get user by id",
+     *  statusCodes={
+     *         200: "good"
+     *     }
+     * )
+     */
+    public function getUserAction(Request $request, $id)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $user = $em->getRepository('AppBundle:User')->find($id);
+
+        if (!$user) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'User not found',
+            ));
+        }
+            
+        return new JsonResponse(array(
+            'status'  => 200,
+            'message' => 'Success',
+            'data'    => $user
+        ));
+    }
+
+    /**
+     * @Route("/user/{id}", name="delete_user", methods="DELETE")
+     * 
+     * @ApiDoc(
+     *  description="Delete user by id",
+     *  statusCodes={
+     *         200: "good"
+     *     }
+     * )
+     */
+    public function deleteUserAction(Request $request, $id)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $user = $em->getRepository('AppBundle:User')->find($id);
+
+        if (!$user) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'User not found'
+            ));
+        }
+        $em->remove($user);
+        $em->flush();
+
+        return new JsonResponse(array(
+            'status'  => 200,
+            'message' => 'User deleted'
+        ));
+    }
 }
