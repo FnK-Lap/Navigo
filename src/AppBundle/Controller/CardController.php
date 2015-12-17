@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Card;
 use AppBundle\Form\CardType;
 
-
+/**
+ * @Route("/api")
+ */
 class CardController extends Controller
 {
     /**
