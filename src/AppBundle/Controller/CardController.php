@@ -27,6 +27,7 @@ class CardController extends Controller
      */
     public function postCardAction(Request $request)
     {
+        $user = $this->getUser();
         $data = json_decode($request->getContent(), true);
 
         $card = new Card();
@@ -34,15 +35,27 @@ class CardController extends Controller
         $form = $this->createForm(new CardType(), $card);
         $form->submit($data);
 
-        var_dump($form->getData());
+
+
         
         if ($form->isValid()) {
-            var_dump('VALID');
-            die();
+            $card->setUser($user);
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($card);
+            $em->flush();
+
+            return new JsonResponse(array(
+                'status' => 201,
+                'message' => 'Card created with success',
+                'data' => $card 
+            ));
         } 
 
-        var_dump($form->getErrorsAsString());
-        die('cc');
+        return new JsonResponse(array(
+            'status' => 400,
+            'message' => 'Fail',
+            'error' => $form->getErrorsAsString()
+        ), 400);
     }
 
     /**
