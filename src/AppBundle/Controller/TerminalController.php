@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Terminal;
 
-
+/**
+ * @Route("/api")
+ */
 class TerminalController extends Controller
 {
     /**

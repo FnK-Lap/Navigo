@@ -13,3 +13,14 @@ services:
             - %paypal_email%
             - %paypal_password%
             - %paypal_signature%
+
+    user.provider:
+        class: AppBundle\Security\User\UserProvider
+        arguments:
+            - @user.repository
+
+    user.repository:
+        class: AppBundle\Entity\UserRepository
+        factory: [@doctrine.orm.entity_manager, getRepository]
+        arguments:
+            - AppBundle\Entity\User

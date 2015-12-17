@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  */
-class User implements \JsonSerializable
+class User implements \JsonSerializable, UserInterface, \Serializable
 {
     const RESULT_PER_PAGE = 2;
 
@@ -63,6 +64,8 @@ class User implements \JsonSerializable
      */
     private $zipcode;
 
+    private $plainPassword;
+
     /**
      * @var string
      *
@@ -87,9 +90,16 @@ class User implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255)
+     * @ORM\Column(name="gender", type="string", length=255, nullable=true)
      */
     private $gender;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salt", type="string", length=255)
+     */
+    private $salt;
 
     /**
      * @var string
@@ -104,6 +114,11 @@ class User implements \JsonSerializable
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
     private $birthday;
+
+    public function __construct()
+    {
+        $this->salt = md5(uniqid(null, true));
+    }
 
 
     /**
@@ -250,14 +265,19 @@ class User implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * Get password
-     *
-     * @return string
-     */
     public function getPassword()
     {
         return $this->password;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
     }
 
     /**
@@ -380,6 +400,46 @@ class User implements \JsonSerializable
         return $this->birthday;
     }
 
+    /**
+     * Get salt
+     *
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Get roles
+     *
+     * @return string
+     */
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
     public function jsonSerialize()
     {
         return array(
@@ -397,4 +457,27 @@ class User implements \JsonSerializable
             'birthday'  => $this->birthday
         );
     }
+
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                $this->id,
+            )
+        );
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            ) = unserialize($serialized);
+    }
+
 }

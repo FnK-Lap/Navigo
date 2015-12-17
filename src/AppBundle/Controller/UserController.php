@@ -8,6 +8,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
 
 
 class UserController extends Controller
@@ -111,4 +112,58 @@ class UserController extends Controller
             'message' => 'User deleted'
         ));
     }
+
+    /**
+     * @Route("/register", name="register", methods="POST")
+     */
+    public function registerAction(Request $request)
+    {
+        // 1) build the form
+        $user = new User();
+        $user->setCreatedAt(new \Datetime());
+        $user->setUpdatedAt(new \Datetime());
+        $form = $this->createForm(new UserType(), $user);
+
+        // 2) handle the submit (will only happen on POST)
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            // ... do any other work - like send them an email, etc
+            // maybe set a "flash" success message for the user
+            die('registered');
+            return $this->redirectToRoute('replace_with_some_route');
+        }
+
+        return new JsonResponse(array(
+            'status' => 400,
+            'message' => $form->getErrorsAsString()
+        ));
+    }
+
+    /**
+     * @Route("/login", name="login_route")
+     */
+    public function loginAction(Request $request)
+    {
+    }
+
+    // /**
+    //  * @Route("/login_check", name="login_check")
+    //  */
+    // public function loginCheckAction()
+    // {
+    //     // this controller will not be executed,
+    //     // as the route is handled by the Security system
+    // }
 }
