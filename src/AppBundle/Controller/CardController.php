@@ -182,7 +182,7 @@ class CardController extends Controller
             return new JsonResponse(array(
                 'status' => 400,
                 'message' => 'Card expired'
-            ))
+            ));
         }
 
         if (!$card) {
