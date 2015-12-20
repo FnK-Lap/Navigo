@@ -51,11 +51,11 @@ class ImportUsersCommand extends ContainerAwareCommand
                 $lastname = strstr(rtrim($buffer), ' ', true);
 
                 if ($index == 0) {
-                    $sql = 'INSERT INTO user (firstname, lastname, created_at, updated_at) VALUES ("'.$firstname.'", "'.$lastname.'", "'.$date->format('Y-m-d H:I:s').'", "'.$date->format('Y-m-d H:I:s').'")'.PHP_EOL;
+                    $sql = 'INSERT INTO user (firstname, lastname, created_at, updated_at, email) VALUES ("'.$firstname.'", "'.$lastname.'", "'.$date->format('Y-m-d H:I:s').'", "'.$date->format('Y-m-d H:I:s').'", "'.$total.'@gmail.com")'.PHP_EOL;
                     $index++;
                     $total++;
                 } elseif ($index == 9999) {
-                    $sql .= ', ("'.$firstname.'", "'.$lastname.'", "'.$date->format('Y-m-d H:I:s').'", "'.$date->format('Y-m-d H:I:s').'")'.PHP_EOL;
+                    $sql .= ', ("'.$firstname.'", "'.$lastname.'", "'.$date->format('Y-m-d H:I:s').'", "'.$date->format('Y-m-d H:I:s').'", "'.$total.'@gmail.com")'.PHP_EOL;
                     $index++;
                     $total++;
                     gc_collect_cycles();
@@ -63,10 +63,15 @@ class ImportUsersCommand extends ContainerAwareCommand
                     $progress->setMessage($total);
                     $progress->advance();
                     $index = 0;
+                    $sql = '';
                 } else {
-                    $sql .= ', ("'.$firstname.'", "'.$lastname.'", "'.$date->format('Y-m-d H:I:s').'", "'.$date->format('Y-m-d H:I:s').'")'.PHP_EOL;
+                    $sql .= ', ("'.$firstname.'", "'.$lastname.'", "'.$date->format('Y-m-d H:I:s').'", "'.$date->format('Y-m-d H:I:s').'", "'.$total.'@gmail.com")'.PHP_EOL;
                     $index++;
                     $total++;
+                }
+
+                if ($total > 989900) {
+                    $output->writeln($total);
                 }
             }
 

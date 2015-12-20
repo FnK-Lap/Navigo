@@ -139,10 +139,10 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            // ... do any other work - like send them an email, etc
-            // maybe set a "flash" success message for the user
-            die('registered');
-            return $this->redirectToRoute('replace_with_some_route');
+            return new JsonResponse(array(
+                'status' => 201,
+                'message' => 'User Created'
+            ));
         }
 
         return new JsonResponse(array(
