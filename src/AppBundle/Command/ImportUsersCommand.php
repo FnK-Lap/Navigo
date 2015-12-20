@@ -69,10 +69,6 @@ class ImportUsersCommand extends ContainerAwareCommand
                     $index++;
                     $total++;
                 }
-
-                if ($total > 989900) {
-                    $output->writeln($total);
-                }
             }
 
             $result = $em->getConnection()->query($sql);

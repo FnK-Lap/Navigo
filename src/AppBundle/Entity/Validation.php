@@ -28,7 +28,6 @@ class Validation
      */
     private $validateAt;
 
-
     /**
      * Get id
      *

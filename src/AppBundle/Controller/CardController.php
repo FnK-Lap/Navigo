@@ -178,6 +178,20 @@ class CardController extends Controller
         $sn = $data["serial_number"];
         $card = $em->getRepository('AppBundle:Card')->findOneBy(array('serialNumber' => $sn));
 
+        if (!$card) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'Card not found'
+            ));
+        }
+
+        if (!$card->getIsActive()) {
+            return new JsonResponse(array(
+                'status' => 400,
+                'message' => 'Card not active'
+            ));
+        }
+
         if ($card->getExpireAt() < new \DateTime()) {
             return new JsonResponse(array(
                 'status' => 400,
@@ -185,12 +199,6 @@ class CardController extends Controller
             ));
         }
 
-        if (!$card) {
-            return new JsonResponse(array(
-                'status'  => 404,
-                'message' => 'Card not found'
-            ));
-        }
        
 
     }
