@@ -55,3 +55,4 @@ security:
         # - { path: ^/api/client, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/oauth/v2/, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/, roles: [ IS_AUTHENTICATED_FULLY ] }
