@@ -22,9 +22,9 @@ class Subscription
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="duration", type="integer")
+     * @ORM\Column(name="duration", type="string")
      */
     private $duration;
 
@@ -63,7 +63,7 @@ class Subscription
     /**
      * Get duration
      *
-     * @return integer
+     * @return string
      */
     public function getDuration()
     {

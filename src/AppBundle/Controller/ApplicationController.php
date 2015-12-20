@@ -57,6 +57,7 @@ class ApplicationController extends Controller
             'TOKEN' => $request->query->get('token')
         ));
 
+        // var_dump($paymentDetails);die;
         if ($paymentDetails['ACK'] == 'Success'
             && $paymentDetails['CHECKOUTSTATUS'] == 'PaymentActionNotInitiated'
             && $paymentDetails['TOKEN'] == $request->query->get('token')
@@ -70,6 +71,7 @@ class ApplicationController extends Controller
             ));
 
             if ($result['ACK'] == 'Success') {
+                var_dump($result);die;
                 return new JsonResponse(array(
                     "status"  => 200,
                     "message" => "Success",

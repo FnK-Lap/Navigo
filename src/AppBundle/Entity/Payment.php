@@ -28,6 +28,13 @@ class Payment
      */
     private $paidAt;
 
+    /**
+     * @var \string
+     *
+     * @ORM\Column(name="transaction_id", type="string")
+     */
+    private $transactionId;
+
 
     /**
      * Get id
@@ -61,6 +68,30 @@ class Payment
     public function getPaidAt()
     {
         return $this->paidAt;
+    }
+
+    /**
+     * Set TransactionId
+     *
+     * @param \String $transactionId
+     *
+     * @return Payment
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
+
+        return $this;
+    }
+
+    /**
+     * Get transactionId
+     *
+     * @return String
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
     }
 }
 

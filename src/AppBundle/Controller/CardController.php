@@ -158,5 +158,42 @@ class CardController extends Controller
         ));
     }
 
+    /**
+     * @Route("/card/validate", name="validate_card", methods="POST")
+     *
+     */
+    public function validateCardAction(Request $request)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data["serial_number"])) {
+            return new JsonResponse(array(
+                'status'  => 400,
+                'message' => 'Fail',
+                'error'   => 'Missing serial_number parameter'
+            ), 400);
+        }
+
+        $sn = $data["serial_number"];
+        $card = $em->getRepository('AppBundle:Card')->findOneBy(array('serialNumber' => $sn));
+
+        if ($card->getExpireAt() < new \DateTime()) {
+            return new JsonResponse(array(
+                'status' => 400,
+                'message' => 'Card expired'
+            ))
+        }
+
+        if (!$card) {
+            return new JsonResponse(array(
+                'status'  => 404,
+                'message' => 'Card not found'
+            ));
+        }
+       
+
+    }
+
     
 }
