@@ -42,3 +42,6 @@ Reponse:
     "refresh_token": "OGQ5N2Y4YzA4MmE2NmIzNGFiZDk2ODRkNDk5NTg0OWVmNDE1N2FhNzViN2M3N2I3M2UzNWJiYmUzZjQ1OWI4NA"
 }
 ```
+
+## Valider une carte
+`POST`:`api/card/validate?access_token=ACCESS_TOKEN` with params `serial_number`
